@@ -26,11 +26,11 @@
     "pg": "^6.1.0",
     "reflect-metadata": "^0.1.8",
     "typedi": "^0.4.2",
-    "typeorm": "^0.0.2-alpha.62",
+    "typeorm": "^0.0.2-alpha.63",
     "typescript": "^2.0.2"
   },
   "peerDependencies": {
-    "typeorm": "^0.0.2-alpha.62",
+    "typeorm": "^0.0.2-alpha.63",
     "typedi": "^0.4.2"
   }
 }

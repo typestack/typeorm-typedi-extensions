@@ -1,3 +1,4 @@
+export * from "./decorators/OrmConnection";
 export * from "./decorators/OrmEntityManager";
 export * from "./decorators/OrmRepository";
 export * from "./decorators/OrmSpecificRepository";
