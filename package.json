@@ -1,0 +1,36 @@
+{
+  "name": "typeorm-typedi-extensions",
+  "version": "0.0.1",
+  "description": "Dependancy injection and service container integration with TypeORM using typedi library.",
+  "license": "MIT",
+  "readmeFilename": "README.md",
+  "author": {
+    "name": "Umed Khudoiberdiev",
+    "email": "pleerock.me@gmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/typeorm/typeorm-typedi-extensions.git"
+  },
+  "bugs": {
+    "url": "https://github.com/typeorm/typeorm-typedi-extensions/issues"
+  },
+  "tags": [
+    "orm",
+    "typescript",
+    "typescript-orm",
+    "typeorm-typedi-extensions",
+    "typeorm-typedi"
+  ],
+  "devDependencies": {
+    "pg": "^6.1.0",
+    "reflect-metadata": "^0.1.8",
+    "typedi": "^0.4.2",
+    "typeorm": "^0.0.2-alpha.62",
+    "typescript": "^2.0.2"
+  },
+  "peerDependencies": {
+    "typeorm": "^0.0.2-alpha.62",
+    "typedi": "^0.4.2"
+  }
+}
