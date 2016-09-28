@@ -29,7 +29,7 @@ export class Gulpfile {
      */
     @Task()
     compile() {
-        return gulp.src("*.js", { read: false })
+        return gulp.src("gulpfile.ts", { read: false })
             .pipe(shell(["tsc"]));
     }
 
@@ -42,7 +42,7 @@ export class Gulpfile {
      */
     @Task()
     npmPublish() {
-        return gulp.src("*.js", { read: false })
+        return gulp.src("gulpfile.ts", { read: false })
             .pipe(shell([
                 "cd ./build/package && npm publish"
             ]));
@@ -53,7 +53,7 @@ export class Gulpfile {
      */
     @Task()
     packageFiles() {
-        return gulp.src("./build/es5/src/**/*")
+        return gulp.src("./build/compiled/src/**/*")
             .pipe(gulp.dest("./build/package"));
     }
 
@@ -132,7 +132,7 @@ export class Gulpfile {
     unit() {
         chai.should();
         chai.use(require("sinon-chai"));
-        return gulp.src("./build/es5/test/unit/**/*.js")
+        return gulp.src("./build/compiled/test/unit/**/*.js")
             .pipe(mocha());
     }
 
