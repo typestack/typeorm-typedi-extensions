@@ -29,7 +29,7 @@ export class Gulpfile {
      */
     @Task()
     compile() {
-        return gulp.src("gulpfile.ts", { read: false })
+        return gulp.src("package.json", { read: false })
             .pipe(shell(["tsc"]));
     }
 
@@ -42,7 +42,7 @@ export class Gulpfile {
      */
     @Task()
     npmPublish() {
-        return gulp.src("gulpfile.ts", { read: false })
+        return gulp.src("package.json", { read: false })
             .pipe(shell([
                 "cd ./build/package && npm publish"
             ]));
