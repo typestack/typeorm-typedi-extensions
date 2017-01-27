@@ -1,4 +1,4 @@
-import {Gulpclass, Task, SequenceTask} from "gulpclass/Decorators";
+import {Gulpclass, Task, SequenceTask} from "gulpclass";
 
 const gulp = require("gulp");
 const del = require("del");
