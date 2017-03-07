@@ -113,6 +113,8 @@ Optionally, you can specify a connection name in the decorator parameters.
 
 Injects `Repository` of some Entity.
 
+If you want to inject custom Repository (class decorated with `@EntityRepository` decorator), use `OrmCustomRepository` instead.
+
 Example using property injection:
 
 ```typescript
@@ -144,6 +146,46 @@ export class PostRepository {
     constructor(@OrmRepository(Post) private repository: Repository<Post>) {
     }
     
+}
+```
+Optionally, you can specify a connection name in the decorator parameters.
+
+### @OrmCustomRepository
+
+Injects custom `Repository` of some Entity. Be aware that you have to create the class which extends the generic `Repository<T>` and decorate it with `EntityRepository<T>` decorator.
+
+Example using constructor injection:
+
+```typescript
+import { Service } from "typedi";
+import { Repository, EntityRepository } from "typeorm";
+import { OrmCustomRepository } from "typeorm-typedi-extensions";
+import "../entity/user";
+
+// create custom Repository class
+@Service()
+@EntityRepository(User)
+export class UserRepository extends Repository<User> {
+    
+    public findByEmail(email: string) {
+        return this.findOne({ email });
+    }
+    
+}
+
+@Service()
+export class PostService {
+
+    // using constructor injection
+    constructor(
+        @OrmCustomRepository(UserRepository)
+        private readonly userRepository: UserRepository
+    )
+
+    public userExist(user: User): boolean {
+        return this.userRepository.findByEmail(user.email) ? true : false;
+    }
+
 }
 ```
 
