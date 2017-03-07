@@ -1,6 +1,6 @@
 {
   "name": "typeorm-typedi-extensions",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "Dependancy injection and service container integration with TypeORM using typedi library.",
   "license": "MIT",
   "readmeFilename": "README.md",
@@ -42,7 +42,7 @@
     "@types/node": "^7.0.4"
   },
   "peerDependencies": {
-    "typeorm": "^0.0.8",
+    "typeorm": "^0.0.9",
     "typedi": "^0.4.2"
   }
 }
