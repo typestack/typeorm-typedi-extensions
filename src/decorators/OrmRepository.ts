@@ -3,6 +3,7 @@ import {Container} from "typedi";
 
 /**
  * Allows to inject a Repository using typedi's Container.
+ * If you want to inject custom Repository class decorated with @EntityRepository decorator, use OrmCustomRepository instead.
  */
 export function OrmRepository(cls: Function, connectionName: string = "default"): Function {
     return function(target: Object|Function, propertyName: string, index?: number) {

@@ -2,7 +2,8 @@ import { ConnectionManager } from "typeorm";
 import { Container } from "typedi";
 
 /**
- * Allows to inject a Repository using typedi's Container.
+ * Allows to inject a custom Repository using typedi's Container.
+ * Use it to get the repository class decorated with @EntityRepository decorator.
  */
 export function OrmCustomRepository(cls: Function, connectionName: string = "default"): Function {
     return function(target: Object|Function, propertyName: string, index?: number) {
