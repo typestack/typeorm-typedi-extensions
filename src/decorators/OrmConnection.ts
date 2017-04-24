@@ -1,5 +1,6 @@
 import {ConnectionManager} from "typeorm";
 import {Container} from "typedi";
+import {Handler} from "typedi/types/Handler";
 
 /**
  * Allows to inject an Connection using typedi's Container.
@@ -17,10 +18,20 @@ export function OrmConnection(connectionName: string = "default"): Function {
             return connectionManager.get(connectionName);
         };
 
+        let handler = <Handler> {
+            object: target,
+            value: getValue
+        };
+
         if (index !== undefined) {
-            Container.registerParamHandler({ type: target as Function, index: index, getValue: getValue });
-        } else {
-            Container.registerPropertyHandler({ target: target as Function /* todo: looks like typedi wrong type here */, key: propertyName, getValue: getValue });
+            handler.index = index;
         }
+
+        if (propertyName !== undefined) {
+            handler.propertyName = propertyName;
+        }
+
+        Container.registerHandler(handler);
+
     };
 }
