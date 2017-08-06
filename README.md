@@ -178,18 +178,32 @@ export class PostService {
 
     // using constructor injection
     constructor(
-        @OrmCustomRepository(UserRepository)
+        @OrmCustomRepository()
         private readonly userRepository: UserRepository
     )
 
     public userExist(user: User): boolean {
-        return this.userRepository.findByEmail(user.email) ? true : false;
+        return this.userRepository.findByEmail(user.email)
+            ? true 
+            : false;
     }
 
 }
 ```
 
-Optionally, you can specify a connection name in the decorator parameters.
+Optionally, you can specify a custom repository class and/or connection name in the decorator parameters:
+```typescript
+@Service()
+export class PostService {
+    constructor(
+        @OrmCustomRepository("my-connection-name")
+        private readonly userRepository: UserRepository
+
+        @OrmCustomRepository(PhotoRepository)
+        private readonly photoRepository: IRepository<Photo>
+    )
+}
+```
 
 ### @OrmTreeRepository
 
