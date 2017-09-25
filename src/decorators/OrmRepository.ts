@@ -123,7 +123,7 @@ export function OrmRepository(entityTypeOrConnectionName?: Function|string, para
         }
 
         // if the decorator has been aplied to parameter (constructor injection)
-        if (index) {
+        if (index !== undefined) {
             const paramTypes: Function[] | undefined = Reflect.getOwnMetadata("design:paramtypes", object, propertyName);
             if (!paramTypes || !paramTypes[index]) {
                 throw new Error(
@@ -158,7 +158,7 @@ export function OrmRepository(entityTypeOrConnectionName?: Function|string, para
                 if (!entityType) {
                     throw new Error(
                         `Missing "entityType" parameter of "@OrmRepository" decorator ` +
-                        index
+                        index !== undefined
                             ? `for a "${propertyName}" method's ${index! + 1}. parameter of ${object.constructor.name} class. `
                             : `for a property "${propertyName}" of ${object.constructor.name} class. `
                         +
