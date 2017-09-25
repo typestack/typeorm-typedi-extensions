@@ -111,9 +111,8 @@ Optionally, you can specify a connection name in the decorator parameters.
 
 ### @OrmRepository
 
-Injects `Repository` of some Entity.
-
-If you want to inject custom Repository (class decorated with `@EntityRepository` decorator), use `OrmCustomRepository` instead.
+Injects `Repository`, `MongoRepository`, `TreeRepository` or custom repository of some Entity.
+Be aware that the property or param decorated with `@OrmRepository` has to be annotated with repository type!
 
 Example using property injection:
 
@@ -143,16 +142,27 @@ import "../entity/Post";
 @Service()
 export class PostRepository {
     
-    constructor(@OrmRepository(Post) private repository: Repository<Post>) {
-    }
+    constructor(
+        @OrmRepository(Post)
+        private repository: Repository<Post>
+    ) {}
     
 }
 ```
-Optionally, you can specify a connection name in the decorator parameters.
+Optionally, you can specify a connection name in the decorator parameters:
 
-### @OrmCustomRepository
+```ts
+@Service()
+export class PostRepository {
+    
+    @OrmRepository(Post, "custom-con-name")
+    private repository: Repository<Post>;
+    
+}
+```
 
-Injects custom `Repository` of some Entity. Be aware that you have to create the class which extends the generic `Repository<T>` and decorate it with `EntityRepository<T>` decorator.
+You can also inject custom `Repository` of some Entity. 
+Be aware that you have to create the class which extends the generic `Repository<T>` and decorate it with `EntityRepository<T>` decorator.
 
 Example using constructor injection:
 
@@ -178,9 +188,9 @@ export class PostService {
 
     // using constructor injection
     constructor(
-        @OrmCustomRepository(UserRepository)
-        private readonly userRepository: UserRepository
-    )
+        @OrmRepository()
+        private readonly userRepository: UserRepository,
+    ) {}
 
     public userExist(user: User): boolean {
         return this.userRepository.findByEmail(user.email) ? true : false;
@@ -191,85 +201,15 @@ export class PostService {
 
 Optionally, you can specify a connection name in the decorator parameters.
 
-### @OrmTreeRepository
-
-Injects `TreeRepository` of some Entity.
-
-Example using property injection:
-
-```typescript
-import {Service} from "typedi";
-import {TreeRepository} from "typeorm";
-import {OrmTreeRepository} from "typeorm-typedi-extensions";
-import "../entity/Post";
-
+```ts
 @Service()
-export class PostRepository {
+export class PostService {
     
-    @OrmTreeRepository(Post)
-    private repository: TreeRepository<Post>;
+    @OrmRepository("custom-con-name")
+    private userRepository: UserRepository;
     
 }
 ```
-
-Example using constructor injection:
-
-```typescript
-import {Service} from "typedi";
-import {TreeRepository} from "typeorm";
-import {OrmTreeRepository} from "typeorm-typedi-extensions";
-import "../entity/Post";
-
-@Service()
-export class PostRepository {
-    
-    constructor(@OrmTreeRepository(Post) private repository: TreeRepository<Post>) {
-    }
-    
-}
-```
-
-Optionally, you can specify a connection name in the decorator parameters.
-
-### @OrmSpecificRepository
-
-Injects `SpecificRepository` of some Entity.
-
-Example using property injection:
-
-```typescript
-import {Service} from "typedi";
-import {SpecificRepository} from "typeorm";
-import {OrmSpecificRepository} from "typeorm-typedi-extensions";
-import "../entity/Post";
-
-@Service()
-export class PostRepository {
-    
-    @OrmSpecificRepository(Post)
-    private repository: SpecificRepository<Post>;
-    
-}
-```
-
-Example using constructor injection:
-
-```typescript
-import {Service} from "typedi";
-import {SpecificRepository} from "typeorm";
-import {OrmSpecificRepository} from "typeorm-typedi-extensions";
-import "../entity/Post";
-
-@Service()
-export class PostRepository {
-    
-    constructor(@OrmSpecificRepository(Post) private repository: SpecificRepository<Post>) {
-    }
-    
-}
-```
-
-Optionally, you can specify a connection name in the decorator parameters.
 
 ## Samples
 
