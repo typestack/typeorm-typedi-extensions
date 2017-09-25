@@ -6,14 +6,12 @@ import {Post} from "./entity/Post";
 
 useContainer(Container);
 createConnection({
-    driver: {
-        type: "postgres",
-        host: "localhost",
-        port: 5432,
-        username: "test",
-        password: "admin",
-        database: "test"
-    },
+    type: "postgres",
+    host: "localhost",
+    port: 5432,
+    username: "test",
+    password: "admin",
+    database: "test",
     entities: [
         __dirname + "/entity/*.js"
     ],
