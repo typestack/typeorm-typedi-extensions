@@ -1,6 +1,10 @@
 import { ConnectionManager, Repository, TreeRepository, MongoRepository } from "typeorm";
 import { Container } from "typedi";
 
+import { EntityTypeMissingError } from "../errors/EntityTypeMissingError";
+import { PropertyTypeMissingError } from "../errors/PropertyTypeMissingError";
+import { ParamTypeMissingError } from "../errors/ParamTypeMissingError";
+
 /**
  * Helper to avoid V8 compilation of anonymous function on each call of decorator.
  */
@@ -126,13 +130,7 @@ export function OrmRepository(entityTypeOrConnectionName?: Function|string, para
         if (index !== undefined) {
             const paramTypes: Function[] | undefined = Reflect.getOwnMetadata("design:paramtypes", object, propertyName);
             if (!paramTypes || !paramTypes[index]) {
-                throw new Error(
-                    `Cannot get reflected type for a "${propertyName}" method's ${index + 1}. parameter of ${object.constructor.name} class. ` +
-                    `Make sure you have turned on an "emitDecoratorMetadata": true, option in tsconfig.json. ` +
-                    `and that you have imported "reflect-metadata" on top of the main entry file in your application.` +
-                    `And make sure that you have annotated the property type correctly with: ` +
-                    `Repository, MongoRepository, TreeRepository or custom repository class type.`
-                );
+                throw new ParamTypeMissingError(object, propertyName, index);
             }
             repositoryType = paramTypes[index];
         }
@@ -140,13 +138,7 @@ export function OrmRepository(entityTypeOrConnectionName?: Function|string, para
         else {
             const propertyType: Function | undefined = Reflect.getOwnMetadata("design:type", object, propertyName);
             if (!propertyType) {
-                throw new Error(
-                    `Cannot get reflected type for a property "${propertyName}" of ${object.constructor.name} class. ` +
-                    `Make sure you have turned on an "emitDecoratorMetadata": true, option in tsconfig.json ` +
-                    `and that you have imported "reflect-metadata" on top of the main entry file in your application.` +
-                    `And make sure that you have annotated the property type correctly with: ` +
-                    `Repository, MongoRepository, TreeRepository or custom repository class type.`
-                );
+                throw new PropertyTypeMissingError(object, propertyName);
             }
             repositoryType = propertyType;
         }
@@ -156,16 +148,7 @@ export function OrmRepository(entityTypeOrConnectionName?: Function|string, para
             case MongoRepository:
             case TreeRepository:
                 if (!entityType) {
-                    throw new Error(
-                        `Missing "entityType" parameter of "@OrmRepository" decorator ` +
-                        index !== undefined
-                            ? `for a "${propertyName}" method's ${index! + 1}. parameter of ${object.constructor.name} class. `
-                            : `for a property "${propertyName}" of ${object.constructor.name} class. `
-                        +
-                        `For injecting Repository, MongoRepository or TreeRepository, ` +
-                        `you have to specify the entity type due to TS reflection limitation - ` +
-                        `"entityType" parameter can be ommited only for custom repositories.`
-                    );
+                    throw new EntityTypeMissingError(object, propertyName, index);
                 }
         }
         
