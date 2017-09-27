@@ -1,7 +1,5 @@
 {
-    "version": "2.0.2",
     "compilerOptions": {
-        "lib": ["es5", "es6", "dom"],
         "target": "es6",
         "module": "commonjs",
         "outDir": "build/compiled",
@@ -9,7 +7,8 @@
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
         "sourceMap": true,
-        "declaration": true
+        "declaration": true,
+        "strict": true
     },
     "exclude": [
         "build",
