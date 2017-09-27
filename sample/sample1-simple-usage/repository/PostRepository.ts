@@ -1,24 +1,24 @@
-import {Repository, EntityManager} from "typeorm";
+import {EntityManager, Repository} from "typeorm";
 import {Service} from "typedi";
 import {Post} from "../entity/Post";
 import {OrmRepository} from "../../../src/decorators/OrmRepository";
-import {OrmEntityManager} from "../../../src/decorators/OrmEntityManager";
+import {OrmManager} from "../../../src/decorators/OrmManager";
 
 @Service()
 export class PostRepository {
 
-    @OrmEntityManager()
+    @OrmManager()
     private entityManager: EntityManager;
 
     constructor(@OrmRepository(Post) private ormRepository: Repository<Post>) {
     }
 
     saveUsingRepository(post: Post) {
-        return this.ormRepository.persist(post);
+        return this.ormRepository.save(post);
     }
 
     saveUsingManager(post: Post) {
-        return this.entityManager.persist(post);
+        return this.entityManager.save(post);
     }
 
     findAll() {

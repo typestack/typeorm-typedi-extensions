@@ -6,16 +6,16 @@ import {Post} from "./entity/Post";
 
 useContainer(Container);
 createConnection({
-    type: "postgres",
+    type: "mysql",
     host: "localhost",
-    port: 5432,
+    port: 3306,
     username: "test",
-    password: "admin",
+    password: "test",
     database: "test",
     entities: [
         __dirname + "/entity/*.js"
     ],
-    autoSchemaSync: true
+    synchronize: true
 }).then(async connection => {
     console.log("connected");
 

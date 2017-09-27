@@ -71,7 +71,7 @@ export class PostRepository {
 
 Optionally, you can specify a connection name in the decorator parameters.
 
-### @OrmEntityManager
+### @OrmManager
 
 Injects `EntityManager` from where you can access any entity in your connection. 
 
@@ -80,12 +80,12 @@ Example using property injection:
 ```typescript
 import {Service} from "typedi";
 import {EntityManager} from "typeorm";
-import {OrmEntityManager} from "typeorm-typedi-extensions";
+import {OrmManager} from "typeorm-typedi-extensions";
 
 @Service()
 export class PostRepository {
     
-    @OrmEntityManager()
+    @OrmManager()
     private entityManager: EntityManager;
     
 }
@@ -96,12 +96,12 @@ Example using constructor injection:
 ```typescript
 import {Service} from "typedi";
 import {EntityManager} from "typeorm";
-import {OrmEntityManager} from "typeorm-typedi-extensions";
+import {OrmManager} from "typeorm-typedi-extensions";
 
 @Service()
 export class PostRepository {
     
-    constructor(@OrmEntityManager() private entityManager: EntityManager) {
+    constructor(@OrmManager() private entityManager: EntityManager) {
     }
     
 }
