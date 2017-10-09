@@ -50,6 +50,6 @@
   },
   "peerDependencies": {
     "typedi": "^0.5.2",
-    "typeorm": ">=0.1.0-alpha.50 <0.2.0"
+    "typeorm": "^0.1.0"
   }
 }
