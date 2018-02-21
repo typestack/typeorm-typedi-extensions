@@ -1,6 +1,6 @@
 {
   "name": "typeorm-typedi-extensions",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Dependency injection and service container integration with TypeORM using TypeDI library.",
   "license": "MIT",
   "readmeFilename": "README.md",
