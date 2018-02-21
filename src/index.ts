@@ -1,3 +1,3 @@
-export * from "./decorators/OrmConnection";
-export * from "./decorators/OrmManager";
-export * from "./decorators/OrmRepository";
+export * from "./decorators/InjectConnection";
+export * from "./decorators/InjectManager";
+export * from "./decorators/InjectRepository";

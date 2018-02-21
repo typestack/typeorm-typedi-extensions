@@ -1,7 +1,7 @@
 export class EntityTypeMissingError extends Error {
     constructor(object: Object, propertyName: string, index?: number) {
         super(
-            `Missing "entityType" parameter of "@OrmRepository" decorator ` +
+            `Missing "entityType" parameter of "@InjectRepository" decorator ` +
             index !== undefined
                 ? `for a "${propertyName}" method's ${index! + 1}. parameter of ${object.constructor.name} class. `
                 : `for a property "${propertyName}" of ${object.constructor.name} class. `

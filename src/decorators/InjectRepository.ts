@@ -44,17 +44,17 @@ export type ParamOrPropDecorator = (object: object, propertyName: string, index?
  * class Sample {
  *   // constructor injection
  *   constructor(
- *     \@OrmRepository()
+ *     \@InjectRepository()
  *      private userRepository: UserRepository,
  *   ) {}
  * 
  *   // property injection
- *  \@OrmRepository()
+ *  \@InjectRepository()
  *   userRepository: UserRepository;
  * }
  * ```
  */
-export function OrmRepository(): ParamOrPropDecorator;
+export function InjectRepository(): ParamOrPropDecorator;
 /**
  * Allows to inject a Repository, MongoRepository, TreeRepository using TypeDI's Container.
  * Be aware that you have to annotate the param/property  with correct type!
@@ -62,17 +62,17 @@ export function OrmRepository(): ParamOrPropDecorator;
  * class Sample {
  *   // constructor injection
  *   constructor(
- *     \@OrmRepository(User)
+ *     \@InjectRepository(User)
  *      private userRepository: Repository<User>,
  *   ) {}
  * 
  *   // property injection
- *  \@OrmRepository(User)
+ *  \@InjectRepository(User)
  *   userRepository: Repository<User>;
  * }
  * ```
  */
-export function OrmRepository(entityType: Function): ParamOrPropDecorator;
+export function InjectRepository(entityType: Function): ParamOrPropDecorator;
 /**
  * Allows to inject a custom repository using TypeDI's Container
  * and specify the connection name in a parameter.
@@ -81,17 +81,17 @@ export function OrmRepository(entityType: Function): ParamOrPropDecorator;
  * class Sample {
  *   // constructor injection
  *   constructor(
- *     \@OrmRepository("test-conn")
+ *     \@InjectRepository("test-conn")
  *      private userRepository: UserRepository,
  *   ) {}
  * 
  *   // property injection
- *  \@OrmRepository("test-conn")
+ *  \@InjectRepository("test-conn")
  *   userRepository: UserRepository;
  * }
  * ```
  */
-export function OrmRepository(connectionName: string): ParamOrPropDecorator;
+export function InjectRepository(connectionName: string): ParamOrPropDecorator;
 /**
  * Allows to inject a Repository, MongoRepository, TreeRepository using TypeDI's Container
  * and specify the connection name in a parameter.
@@ -100,19 +100,19 @@ export function OrmRepository(connectionName: string): ParamOrPropDecorator;
  * class Sample {
  *   // constructor injection
  *   constructor(
- *     \@OrmRepository(User, "test-conn")
+ *     \@InjectRepository(User, "test-conn")
  *      private userRepository: Repository<User>,
  *   ) {}
  * 
  *   // property injection
- *  \@OrmRepository(User, "test-conn")
+ *  \@InjectRepository(User, "test-conn")
  *   userRepository: Repository<User>;
  * }
  * ```
  */
-export function OrmRepository(entityType: Function, connectionName: string): ParamOrPropDecorator;
+export function InjectRepository(entityType: Function, connectionName: string): ParamOrPropDecorator;
 
-export function OrmRepository(entityTypeOrConnectionName?: Function|string, paramConnectionName = "default"): ParamOrPropDecorator {
+export function InjectRepository(entityTypeOrConnectionName?: Function|string, paramConnectionName = "default"): ParamOrPropDecorator {
     return (object: object, propertyName: string, index?: number) => {
         let entityType: Function|undefined;
         let connectionName: string;

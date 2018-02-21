@@ -1,20 +1,21 @@
 import {EntityManager, Repository} from "typeorm";
 import {Service} from "typedi";
+
 import {Post} from "../entity/Post";
-import {OrmRepository} from "../../../src/decorators/OrmRepository";
-import {OrmManager} from "../../../src/decorators/OrmManager";
+import {InjectRepository} from "../../../src/decorators/InjectRepository";
+import {InjectManager} from "../../../src/decorators/InjectManager";
 
 @Service()
 export class PostRepository {
 
-    @OrmManager()
+    @InjectManager()
     private entityManager: EntityManager;
 
-    constructor(@OrmRepository(Post) private ormRepository: Repository<Post>) {
+    constructor(@InjectRepository(Post) private InjectRepository: Repository<Post>) {
     }
 
     saveUsingRepository(post: Post) {
-        return this.ormRepository.save(post);
+        return this.InjectRepository.save(post);
     }
 
     saveUsingManager(post: Post) {
@@ -22,7 +23,7 @@ export class PostRepository {
     }
 
     findAll() {
-        return this.ormRepository.find();
+        return this.InjectRepository.find();
     }
 
 }
