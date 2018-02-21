@@ -169,7 +169,7 @@ Example using constructor injection:
 ```typescript
 import { Service } from "typedi";
 import { Repository, EntityRepository } from "typeorm";
-import { OrmCustomRepository } from "typeorm-typedi-extensions";
+import { OrmRepository } from "typeorm-typedi-extensions";
 import "../entity/user";
 
 // create custom Repository class
@@ -192,8 +192,8 @@ export class PostService {
         private readonly userRepository: UserRepository,
     ) {}
 
-    public userExist(user: User): boolean {
-        return this.userRepository.findByEmail(user.email) ? true : false;
+    public async userExist(user: User): boolean {
+        return await this.userRepository.findByEmail(user.email) ? true : false;
     }
 
 }
