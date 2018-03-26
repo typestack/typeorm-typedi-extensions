@@ -1,7 +1,7 @@
 {
   "name": "typeorm-typedi-extensions",
-  "version": "0.1.1",
-  "description": "Dependancy injection and service container integration with TypeORM using typedi library.",
+  "version": "0.2.0",
+  "description": "Dependency injection and service container integration with TypeORM using TypeDI library.",
   "license": "MIT",
   "readmeFilename": "README.md",
   "author": {
@@ -39,17 +39,17 @@
     "gulp-tslint": "^8.1.2",
     "gulpclass": "^0.1.2",
     "mysql": "^2.14.1",
-    "reflect-metadata": "^0.1.10",
+    "reflect-metadata": "^0.1.12",
     "sinon-chai": "^2.13.0",
-    "ts-node": "^3.3.0",
+    "ts-node": "^5.0.0",
     "tslint": "^5.7.0",
     "tslint-stylish": "^2.1.0",
-    "typedi": "^0.5.2",
-    "typeorm": "0.1.0",
-    "typescript": "^2.5.3"
+    "typedi": "^0.6.1",
+    "typeorm": "^0.1.12",
+    "typescript": "2.5.3"
   },
   "peerDependencies": {
-    "typedi": "^0.5.2",
-    "typeorm": "^0.1.0"
+    "typedi": "^0.6.1",
+    "typeorm": "^0.1.12"
   }
 }

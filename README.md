@@ -33,7 +33,7 @@ createConnection({
 All decorators can be used on properties and constructor arguments, e.g. you can use both
 property and constructor injection.
 
-### @OrmConnection
+### @InjectConnection
 
 Injects `Connection` from where you can access anything in your connection.
 
@@ -42,12 +42,12 @@ Example using property injection:
 ```typescript
 import {Service} from "typedi";
 import {Connection} from "typeorm";
-import {OrmConnection} from "typeorm-typedi-extensions";
+import {InjectConnection} from "typeorm-typedi-extensions";
 
 @Service()
 export class PostRepository {
     
-    @OrmConnection()
+    @InjectConnection()
     private connection: Connection;
     
 }
@@ -58,12 +58,12 @@ Example using constructor injection:
 ```typescript
 import {Service} from "typedi";
 import {Connection} from "typeorm";
-import {OrmConnection} from "typeorm-typedi-extensions";
+import {InjectConnection} from "typeorm-typedi-extensions";
 
 @Service()
 export class PostRepository {
     
-    constructor(@OrmConnection() private connection: Connection) {
+    constructor(@InjectConnection() private connection: Connection) {
     }
     
 }
@@ -71,7 +71,7 @@ export class PostRepository {
 
 Optionally, you can specify a connection name in the decorator parameters.
 
-### @OrmManager
+### @InjectManager
 
 Injects `EntityManager` from where you can access any entity in your connection. 
 
@@ -80,12 +80,12 @@ Example using property injection:
 ```typescript
 import {Service} from "typedi";
 import {EntityManager} from "typeorm";
-import {OrmManager} from "typeorm-typedi-extensions";
+import {InjectManager} from "typeorm-typedi-extensions";
 
 @Service()
 export class PostRepository {
     
-    @OrmManager()
+    @InjectManager()
     private entityManager: EntityManager;
     
 }
@@ -96,12 +96,12 @@ Example using constructor injection:
 ```typescript
 import {Service} from "typedi";
 import {EntityManager} from "typeorm";
-import {OrmManager} from "typeorm-typedi-extensions";
+import {InjectManager} from "typeorm-typedi-extensions";
 
 @Service()
 export class PostRepository {
     
-    constructor(@OrmManager() private entityManager: EntityManager) {
+    constructor(@InjectManager() private entityManager: EntityManager) {
     }
     
 }
@@ -109,23 +109,23 @@ export class PostRepository {
 
 Optionally, you can specify a connection name in the decorator parameters.
 
-### @OrmRepository
+### @InjectRepository
 
 Injects `Repository`, `MongoRepository`, `TreeRepository` or custom repository of some Entity.
-Be aware that the property or param decorated with `@OrmRepository` has to be annotated with repository type!
+Be aware that the property or param decorated with `@InjectRepository` has to be annotated with repository type!
 
 Example using property injection:
 
 ```typescript
 import {Service} from "typedi";
 import {Repository} from "typeorm";
-import {OrmRepository} from "typeorm-typedi-extensions";
+import {InjectRepository} from "typeorm-typedi-extensions";
 import "../entity/Post";
 
 @Service()
 export class PostRepository {
     
-    @OrmRepository(Post)
+    @InjectRepository(Post)
     private repository: Repository<Post>;
     
 }
@@ -136,14 +136,14 @@ Example using constructor injection:
 ```typescript
 import {Service} from "typedi";
 import {Repository} from "typeorm";
-import {OrmRepository} from "typeorm-typedi-extensions";
+import {InjectRepository} from "typeorm-typedi-extensions";
 import "../entity/Post";
 
 @Service()
 export class PostRepository {
     
     constructor(
-        @OrmRepository(Post)
+        @InjectRepository(Post)
         private repository: Repository<Post>
     ) {}
     
@@ -155,7 +155,7 @@ Optionally, you can specify a connection name in the decorator parameters:
 @Service()
 export class PostRepository {
     
-    @OrmRepository(Post, "custom-con-name")
+    @InjectRepository(Post, "custom-con-name")
     private repository: Repository<Post>;
     
 }
@@ -169,7 +169,7 @@ Example using constructor injection:
 ```typescript
 import { Service } from "typedi";
 import { Repository, EntityRepository } from "typeorm";
-import { OrmRepository } from "typeorm-typedi-extensions";
+import { InjectRepository } from "typeorm-typedi-extensions";
 import "../entity/user";
 
 // create custom Repository class
@@ -188,7 +188,7 @@ export class PostService {
 
     // using constructor injection
     constructor(
-        @OrmRepository()
+        @InjectRepository()
         private readonly userRepository: UserRepository,
     ) {}
 
@@ -205,7 +205,7 @@ Optionally, you can specify a connection name in the decorator parameters.
 @Service()
 export class PostService {
     
-    @OrmRepository("custom-con-name")
+    @InjectRepository("custom-con-name")
     private userRepository: UserRepository;
     
 }
