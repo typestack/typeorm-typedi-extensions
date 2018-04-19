@@ -1,7 +1,6 @@
 import "reflect-metadata";
 import {createConnection, useContainer} from "typeorm";
 import {Container} from "typedi";
-
 import {PostRepository} from "./repository/PostRepository";
 import {Post} from "./entity/Post";
 
@@ -14,7 +13,7 @@ createConnection({
     password: "test",
     database: "test",
     entities: [
-        __dirname + "/entity/*.js"
+        Post
     ],
     synchronize: true
 }).then(async connection => {
