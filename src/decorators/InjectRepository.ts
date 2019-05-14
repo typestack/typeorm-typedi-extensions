@@ -9,7 +9,7 @@ import { ParamTypeMissingError } from "../errors/ParamTypeMissingError";
  * Helper to avoid V8 compilation of anonymous function on each call of decorator.
  */
 function getRepository(connectionName: string, repositoryType: Function, entityType: Function, containerInstance: ContainerInstance) {
-    const connectionManager = Container.get(ConnectionManager);
+    const connectionManager = containerInstance.get(ConnectionManager);
     if (!connectionManager.has(connectionName)) {
         throw new Error(
             `Cannot get connection "${connectionName}" from the connection manager. ` +
