@@ -1,5 +1,5 @@
 import { ConnectionManager, Repository, TreeRepository, MongoRepository } from "typeorm";
-import { Container, ContainerInstance } from 'typedi';
+import { Container, ContainerInstance } from "typedi";
 
 import { EntityTypeMissingError } from "../errors/EntityTypeMissingError";
 import { PropertyTypeMissingError } from "../errors/PropertyTypeMissingError";
