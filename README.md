@@ -192,7 +192,7 @@ export class PostService {
         private readonly userRepository: UserRepository,
     ) {}
 
-    public async userExist(user: User): boolean {
+    public async userExist(user: User): Promise<boolean> {
         return await this.userRepository.findByEmail(user.email) ? true : false;
     }
 
