@@ -1,4 +1,4 @@
-import {ConnectionManager} from "typeorm";
+import {ConnectionManager, ContainerInstance} from "typeorm";
 import {Container} from "typedi";
 
 /**
@@ -6,8 +6,8 @@ import {Container} from "typedi";
  */
 export function InjectManager(connectionName: string = "default"): Function {
     return function(object: Object|Function, propertyName: string, index?: number) {
-        Container.registerHandler({ object, index, propertyName, value: () => {
-            const connectionManager = Container.get(ConnectionManager);
+        Container.registerHandler({ object, index, propertyName, value: (containerInstance: ContainerInstance) => {
+            const connectionManager = containerInstance.get(ConnectionManager);
             if (!connectionManager.has(connectionName))
                 throw new Error(`Cannot get connection "${connectionName}" from the connection manager. ` +
                   `Make sure you have created such connection. Also make sure you have called useContainer(Container) ` +

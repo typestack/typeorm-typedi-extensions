@@ -1,5 +1,5 @@
 import { ConnectionManager, Repository, TreeRepository, MongoRepository } from "typeorm";
-import { Container } from "typedi";
+import { Container, ContainerInstance } from "typedi";
 
 import { EntityTypeMissingError } from "../errors/EntityTypeMissingError";
 import { PropertyTypeMissingError } from "../errors/PropertyTypeMissingError";
@@ -8,8 +8,8 @@ import { ParamTypeMissingError } from "../errors/ParamTypeMissingError";
 /**
  * Helper to avoid V8 compilation of anonymous function on each call of decorator.
  */
-function getRepository(connectionName: string, repositoryType: Function, entityType: Function) {
-    const connectionManager = Container.get(ConnectionManager);
+function getRepository(connectionName: string, repositoryType: Function, entityType: Function, containerInstance: ContainerInstance) {
+    const connectionManager = containerInstance.get(ConnectionManager);
     if (!connectionManager.has(connectionName)) {
         throw new Error(
             `Cannot get connection "${connectionName}" from the connection manager. ` +
@@ -47,7 +47,7 @@ export type ParamOrPropDecorator = (object: object, propertyName: string, index?
  *     \@InjectRepository()
  *      private userRepository: UserRepository,
  *   ) {}
- * 
+ *
  *   // property injection
  *  \@InjectRepository()
  *   userRepository: UserRepository;
@@ -65,7 +65,7 @@ export function InjectRepository(): ParamOrPropDecorator;
  *     \@InjectRepository(User)
  *      private userRepository: Repository<User>,
  *   ) {}
- * 
+ *
  *   // property injection
  *  \@InjectRepository(User)
  *   userRepository: Repository<User>;
@@ -84,7 +84,7 @@ export function InjectRepository(entityType: Function): ParamOrPropDecorator;
  *     \@InjectRepository("test-conn")
  *      private userRepository: UserRepository,
  *   ) {}
- * 
+ *
  *   // property injection
  *  \@InjectRepository("test-conn")
  *   userRepository: UserRepository;
@@ -103,7 +103,7 @@ export function InjectRepository(connectionName: string): ParamOrPropDecorator;
  *     \@InjectRepository(User, "test-conn")
  *      private userRepository: Repository<User>,
  *   ) {}
- * 
+ *
  *   // property injection
  *  \@InjectRepository(User, "test-conn")
  *   userRepository: Repository<User>;
@@ -151,12 +151,12 @@ export function InjectRepository(entityTypeOrConnectionName?: Function|string, p
                     throw new EntityTypeMissingError(object, propertyName, index);
                 }
         }
-        
+
         Container.registerHandler({
             index,
             object,
             propertyName,
-            value: () => getRepository(connectionName, repositoryType, entityType!),
+            value: (containerInstance: ContainerInstance) => getRepository(connectionName, repositoryType, entityType!, containerInstance),
         });
     };
 }
