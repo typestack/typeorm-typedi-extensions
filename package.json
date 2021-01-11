@@ -44,12 +44,12 @@
     "ts-node": "^6.0.0",
     "tslint": "^5.7.0",
     "tslint-stylish": "^2.1.0",
-    "typedi": "^0.8.0",
-    "typeorm": "^0.2.7",
+    "typedi": "^0.9.0",
+    "typeorm": "^0.2.29",
     "typescript": "^2.8.1"
   },
   "peerDependencies": {
-    "typedi": ">=0.7.2",
+    "typedi": ">=0.9.0",
     "typeorm": ">=0.2.0"
   }
 }
