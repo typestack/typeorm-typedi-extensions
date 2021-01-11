@@ -46,7 +46,7 @@
     "tslint-stylish": "^2.1.0",
     "typedi": "^0.9.0",
     "typeorm": "^0.2.29",
-    "typescript": "^2.8.1"
+    "typescript": "^4.1.3"
   },
   "peerDependencies": {
     "typedi": ">=0.9.0",
