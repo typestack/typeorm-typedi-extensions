@@ -10,8 +10,8 @@ export function InjectManager(connectionName: string = 'default'): Function {
       object: object as Constructable<unknown>,
       index,
       propertyName,
-      value: () => {
-        const connectionManager = Container.get(ConnectionManager);
+      value: containerInstance => {
+        const connectionManager = containerInstance.get(ConnectionManager);
         if (!connectionManager.has(connectionName))
           throw new Error(
             `Cannot get connection "${connectionName}" from the connection manager. ` +
