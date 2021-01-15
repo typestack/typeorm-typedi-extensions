@@ -1,4 +1,6 @@
 export class ParamTypeMissingError extends Error {
+  public name = 'ParamTypeMissingError';
+
   constructor(object: Object, propertyName: string, index: number) {
     super(
       `Cannot get reflected type for a "${propertyName}" method's ${index + 1}. parameter of ${
@@ -9,7 +11,5 @@ export class ParamTypeMissingError extends Error {
         `And make sure that you have annotated the property type correctly with: ` +
         `Repository, MongoRepository, TreeRepository or custom repository class type.`
     );
-
-    Object.setPrototypeOf(this, ParamTypeMissingError.prototype);
   }
 }

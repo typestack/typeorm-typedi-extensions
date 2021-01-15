@@ -1,23 +1,23 @@
 import { ConnectionManager } from 'typeorm';
 import { Container, Constructable } from 'typedi';
+import { ConnectionNotFoundError } from '../errors/manager-not-found.error';
 
 /**
- * Allows to inject an Connection using typedi's Container.
+ * Injects the `Connection` object using TypeDI's container.
+ * This decorator can be used both as class property decorator or constructor parameter decorator.
  */
-export function InjectConnection(connectionName: string = 'default'): Function {
-  return function (object: Object | Function, propertyName: string, index?: number) {
+export function InjectConnection(connectionName: string = 'default'): CallableFunction {
+  return function (object: Object, propertyName: string | symbol, index?: number): void {
     Container.registerHandler({
       object: object as Constructable<unknown>,
-      index,
-      propertyName,
+      index: index,
+      propertyName: propertyName as string,
       value: containerInstance => {
         const connectionManager = containerInstance.get(ConnectionManager);
-        if (!connectionManager.has(connectionName))
-          throw new Error(
-            `Cannot get connection "${connectionName}" from the connection manager. ` +
-              `Make sure you have created such connection. Also make sure you have called useContainer(Container) ` +
-              `in your application before you established a connection and importing any entity.`
-          );
+
+        if (!connectionManager.has(connectionName)) {
+          throw new ConnectionNotFoundError(connectionName);
+        }
 
         return connectionManager.get(connectionName);
       },

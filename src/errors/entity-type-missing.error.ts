@@ -1,4 +1,6 @@
 export class EntityTypeMissingError extends Error {
+  public name = 'EntityTypeMissingError';
+
   constructor(object: Object, propertyName: string, index?: number) {
     super(
       `Missing "entityType" parameter of "@InjectRepository" decorator ` + index !== undefined
@@ -8,7 +10,5 @@ export class EntityTypeMissingError extends Error {
             `you have to specify the entity type due to TS reflection limitation - ` +
             `"entityType" parameter can be ommited only for custom repositories.`
     );
-
-    Object.setPrototypeOf(this, EntityTypeMissingError.prototype);
   }
 }

@@ -1,4 +1,6 @@
 export class PropertyTypeMissingError extends Error {
+  public name = 'PropertyTypeMissingError';
+
   constructor(object: Object, propertyName: string) {
     super(
       `Cannot get reflected type for a property "${propertyName}" of ${object.constructor.name} class. ` +
@@ -7,7 +9,5 @@ export class PropertyTypeMissingError extends Error {
         `And make sure that you have annotated the property type correctly with: ` +
         `Repository, MongoRepository, TreeRepository or custom repository class type.`
     );
-
-    Object.setPrototypeOf(this, PropertyTypeMissingError.prototype);
   }
 }

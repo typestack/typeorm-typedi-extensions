@@ -1,27 +1,25 @@
-import { ConnectionManager, Repository, TreeRepository, MongoRepository } from 'typeorm';
+import { ConnectionManager, Repository, TreeRepository, MongoRepository, EntityTarget, ObjectType } from 'typeorm';
 import { Constructable, Container, ContainerInstance } from 'typedi';
 
 import { EntityTypeMissingError } from '../errors/entity-type-missing.error';
 import { PropertyTypeMissingError } from '../errors/property-type-missing.error';
 import { ParamTypeMissingError } from '../errors/param-type-missing.error';
+import { ConnectionNotFoundError } from '../errors/manager-not-found.error';
 
 /**
  * Helper to avoid V8 compilation of anonymous function on each call of decorator.
  */
-function getRepository(
+function getRepositoryHelper(
   connectionName: string,
-  repositoryType: Function,
-  entityType: Function,
+  repositoryType: ObjectType<unknown>,
+  entityType: EntityTarget<unknown>,
   containerInstance: ContainerInstance
 ) {
   const connectionManager = containerInstance.get(ConnectionManager);
   if (!connectionManager.has(connectionName)) {
-    throw new Error(
-      `Cannot get connection "${connectionName}" from the connection manager. ` +
-        `Make sure you have created such connection. Also make sure you have called useContainer(Container) ` +
-        `in your application before you established a connection and importing any entity.`
-    );
+    throw new ConnectionNotFoundError(connectionName);
   }
+
   const connection = connectionManager.get(connectionName);
 
   switch (repositoryType) {
@@ -31,97 +29,63 @@ function getRepository(
       return connection.getMongoRepository(entityType);
     case TreeRepository:
       return connection.getTreeRepository(entityType);
-    // if not the TypeORM's ones, there must be custom repository classes
     default:
+      /** If the requested type is not well-known, then it must be a custom repository. */
       return connection.getCustomRepository(repositoryType);
   }
 }
 
 /**
- * Satisfy typescript compiler about universal decorators.
- */
-export type ParamOrPropDecorator = (object: object, propertyName: string, index?: number) => void;
-
-/**
- * Allows to inject a custom repository using TypeDI's Container.
- * Be aware that you have to annotate the param/property  with correct type!
- * ```ts
- * class Sample {
- *   // constructor injection
- *   constructor(
- *     \@InjectRepository()
- *      private userRepository: UserRepository,
- *   ) {}
+ * Injects the requested custom repository object using TypeDI's container. To make injection work without explicity
+ * specifying the type in the decorator, you must annotate your properties and/or parameters with the correct type!
  *
- *   // property injection
+ * ```ts
+ * class SampleClass {
  *  \@InjectRepository()
  *   userRepository: UserRepository;
+ *
+ *   constructor(@InjectRepository() private userRepository: UserRepository) {}
  * }
  * ```
  */
-export function InjectRepository(): ParamOrPropDecorator;
+export function InjectRepository(): CallableFunction;
+export function InjectRepository(connectionName: string): CallableFunction;
+
 /**
- * Allows to inject a Repository, MongoRepository, TreeRepository using TypeDI's Container.
- * Be aware that you have to annotate the param/property  with correct type!
- * ```ts
- * class Sample {
- *   // constructor injection
- *   constructor(
- *     \@InjectRepository(User)
- *      private userRepository: Repository<User>,
- *   ) {}
+ * Injects the requested `Repository`, `MongoRepository`, `TreeRepository` object using TypeDI's container.
+ * To make injection work without explicity specifying the type in the decorator, you must annotate your properties
+ * and/or parameters with the correct type!
  *
- *   // property injection
+ * ```ts
+ * class SampleClass {
  *  \@InjectRepository(User)
  *   userRepository: Repository<User>;
+ *
+ *   constructor(@InjectRepository(User) private userRepository: Repository<User>) {}
  * }
  * ```
  */
-export function InjectRepository(entityType: Function): ParamOrPropDecorator;
+export function InjectRepository(entityType: Function): CallableFunction;
 /**
- * Allows to inject a custom repository using TypeDI's Container
- * and specify the connection name in a parameter.
- * Be aware that you have to annotate the param/property  with correct type!
- * ```ts
- * class Sample {
- *   // constructor injection
- *   constructor(
- *     \@InjectRepository("test-conn")
- *      private userRepository: UserRepository,
- *   ) {}
+ * Injects the requested `Repository`, `MongoRepository`, `TreeRepository` object using TypeDI's container.
+ * To make injection work without explicity specifying the type in the decorator, you must annotate your properties
+ * and/or parameters with the correct type!
  *
- *   // property injection
- *  \@InjectRepository("test-conn")
- *   userRepository: UserRepository;
- * }
- * ```
- */
-export function InjectRepository(connectionName: string): ParamOrPropDecorator;
-/**
- * Allows to inject a Repository, MongoRepository, TreeRepository using TypeDI's Container
- * and specify the connection name in a parameter.
- * Be aware that you have to annotate the param/property with correct type!
  * ```ts
- * class Sample {
- *   // constructor injection
- *   constructor(
- *     \@InjectRepository(User, "test-conn")
- *      private userRepository: Repository<User>,
- *   ) {}
- *
- *   // property injection
+ * class SampleClass {
  *  \@InjectRepository(User, "test-conn")
  *   userRepository: Repository<User>;
+ *
+ *   constructor(@InjectRepository(User, "test-conn") private userRepository: Repository<User>) {}
  * }
  * ```
  */
-export function InjectRepository(entityType: Function, connectionName: string): ParamOrPropDecorator;
-
+export function InjectRepository(entityType: Function, connectionName: string): CallableFunction;
 export function InjectRepository(
   entityTypeOrConnectionName?: Function | string,
   paramConnectionName = 'default'
-): ParamOrPropDecorator {
-  return (object: object, propertyName: string, index?: number) => {
+): CallableFunction {
+  return (object: object, propertyName: string | symbol, index?: number): void => {
     let entityType: Function | undefined;
     let connectionName: string;
     let repositoryType: Function;
@@ -134,20 +98,27 @@ export function InjectRepository(
       entityType = entityTypeOrConnectionName;
     }
 
-    // if the decorator has been aplied to parameter (constructor injection)
-    if (index !== undefined) {
-      const paramTypes: Function[] | undefined = Reflect.getOwnMetadata('design:paramtypes', object, propertyName);
-      if (!paramTypes || !paramTypes[index]) {
-        throw new ParamTypeMissingError(object, propertyName, index);
-      }
-      repositoryType = paramTypes[index];
+    if (Reflect?.getOwnMetadata == undefined) {
+      throw new Error('Reflect.getOwnMetadata is not defined. Make sure to import the `reflect-metadata` package!');
     }
-    // if the parameter has been aplied to class property
-    else {
-      const propertyType: Function | undefined = Reflect.getOwnMetadata('design:type', object, propertyName);
-      if (!propertyType) {
-        throw new PropertyTypeMissingError(object, propertyName);
+
+    if (index !== undefined) {
+      /** The decorator has been applied to a constructor parameter. */
+      const paramTypes: Function[] | undefined = Reflect.getOwnMetadata('design:paramtypes', object, propertyName);
+
+      if (!paramTypes || !paramTypes[index]) {
+        throw new ParamTypeMissingError(object, propertyName as string, index);
       }
+
+      repositoryType = paramTypes[index];
+    } else {
+      /** The decorator has been applied to a class property. */
+      const propertyType: Function | undefined = Reflect.getOwnMetadata('design:type', object, propertyName);
+
+      if (!propertyType) {
+        throw new PropertyTypeMissingError(object, propertyName as string);
+      }
+
       repositoryType = propertyType;
     }
 
@@ -156,15 +127,15 @@ export function InjectRepository(
       case MongoRepository:
       case TreeRepository:
         if (!entityType) {
-          throw new EntityTypeMissingError(object, propertyName, index);
+          throw new EntityTypeMissingError(object, propertyName as string, index);
         }
     }
 
     Container.registerHandler({
-      index,
       object: object as Constructable<unknown>,
-      propertyName,
-      value: containerInstance => getRepository(connectionName, repositoryType, entityType!, containerInstance),
+      index: index,
+      propertyName: propertyName as string,
+      value: containerInstance => getRepositoryHelper(connectionName, repositoryType, entityType!, containerInstance),
     });
   };
 }
