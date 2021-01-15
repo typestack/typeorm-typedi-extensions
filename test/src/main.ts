@@ -10,4 +10,6 @@ startApp()
   .catch(error => {
     console.error(`Ohh noo! Error while running the app!`);
     console.error(error);
+    /** We exit with error code so tests will fail. */
+    process.exit(-1);
   });

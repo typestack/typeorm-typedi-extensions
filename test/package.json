@@ -11,7 +11,8 @@
     "typescript": "^4.1.3"
   },
   "scripts": {
-    "test": "npm run build && node ./build/sample/src/main.js",
-    "build": "rm -rf build && tsc"
+    "build": "rm -rf build && tsc",
+    "start": "node ./build/test/src/main.js",
+    "test": "npm run build && npm run start"
   }
 }
