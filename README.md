@@ -127,8 +127,6 @@ export class PostRepository {
 You can also inject custom `Repository` of some Entity. To make this work have to create the class which extends the
 generic `Repository<T>` class and decorate it with `EntityRepository<T>` decorator.
 
-Example using constructor injection:
-
 ```typescript
 import { Service } from 'typedi';
 import { Repository, EntityRepository } from 'typeorm';
