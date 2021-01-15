@@ -12,15 +12,13 @@ jobs:
   tests:
     name: Tests
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: test
     steps:
       - uses: actions/checkout@v1
       - uses: actions/setup-node@v1
       - run: npm ci --ignore-scripts
-      - run: npm run build
-      - run: npm run start
+      - run: cd ./test && npm ci --ignore-scripts
+      - run: cd ./test && npm run build
+      - run: cd ./test && npm run start
   build:
     name: Build
     runs-on: ubuntu-latest
