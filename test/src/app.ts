@@ -1,19 +1,19 @@
 import { ok, deepStrictEqual } from 'assert';
 import { Container } from 'typedi';
-import { createConnection, } from 'typeorm';
+import { createConnection } from 'typeorm';
 import { UserRepository } from './user.respository';
 import { User } from './user.entity';
 
 export async function startApp() {
-  const connection = await createConnection({ 
+  const connection = await createConnection({
     /** we use in memoty SQL JS to test the lib. */
-    type: 'sqljs', 
+    type: 'sqljs',
     logger: 'advanced-console',
     logging: true,
     /** We don't want to mess with the creation of table now, so we auto-create it. */
     synchronize: true,
     /** Entities must be registered in TypeORM before you can use them. */
-    entities: [User], 
+    entities: [User],
   });
 
   const userOne = new User();
