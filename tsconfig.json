@@ -1,20 +1,19 @@
 {
-    "compilerOptions": {
-        "target": "es5",
-        "lib": ["es5", "es6"],
-        "module": "commonjs",
-        "outDir": "build/compiled",
-        "moduleResolution": "node",
-        "emitDecoratorMetadata": true,
-        "experimentalDecorators": true,
-        "sourceMap": true,
-        "declaration": true,
-        "strict": false,
-        "strictNullChecks": true,
-        "noImplicitAny": true
-    },
-    "exclude": [
-        "build",
-        "node_modules"
-    ]
+  "compilerOptions": {
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "target": "es2018",
+    "lib": ["es2018"],
+    "outDir": "build/node",
+    "rootDirs": ["./src"],
+    "strict": true,
+    "sourceMap": true,
+    "inlineSources": true,
+    "removeComments": false,
+    "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "forceConsistentCasingInFileNames": true
+  },
+  "exclude": ["build", "node_modules", "sample", "**/*.spec.ts", "test/**"]
 }

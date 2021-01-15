@@ -2,24 +2,16 @@
   "name": "typeorm-typedi-extensions",
   "version": "0.2.2",
   "description": "Dependency injection and service container integration with TypeORM using TypeDI library.",
+  "author": "TypeORM contributors",
   "license": "MIT",
-  "readmeFilename": "README.md",
-  "author": {
-    "name": "Umed Khudoiberdiev",
-    "email": "pleerock.me@gmail.com"
-  },
-  "contributors": [
-    {
-      "name": "Michał Lytek",
-      "url": "https://github.com/19majkel94"
-    }
-  ],
+  "sideEffects": false,
+  "main": "./cjs/index.js",
+  "module": "./esm5/index.js",
+  "es2015": "./esm2015/index.js",
+  "typings": "./types/index.d.ts",
   "repository": {
     "type": "git",
-    "url": "https://github.com/typeorm/typeorm-typedi-extensions.git"
-  },
-  "bugs": {
-    "url": "https://github.com/typeorm/typeorm-typedi-extensions/issues"
+    "url": "https://github.com/pleerock/typedi.git"
   },
   "tags": [
     "orm",
@@ -28,28 +20,27 @@
     "typeorm-typedi-extensions",
     "typeorm-typedi"
   ],
+  "scripts": {
+    "build": "npm run build:cjs",
+    "build:clean": "rimraf build",
+    "build:es2015": "tsc --project tsconfig.prod.esm2015.json",
+    "build:esm5": "tsc --project tsconfig.prod.esm5.json",
+    "build:cjs": "tsc --project tsconfig.prod.cjs.json",
+    "build:types": "tsc --project tsconfig.prod.types.json",
+    "prettier:fix": "prettier --write \"**/*.{ts,md}\"",
+    "prettier:check": "prettier --check \"**/*.{ts,md}\""
+  },
   "devDependencies": {
-    "@types/node": "^8.0.31",
-    "chai": "^4.1.2",
-    "del": "^3.0.0",
-    "gulp": "^3.9.1",
-    "gulp-mocha": "^4.3.1",
-    "gulp-replace": "^0.6.1",
-    "gulp-shell": "^0.6.3",
-    "gulp-tslint": "^8.1.2",
-    "gulpclass": "^0.1.2",
-    "mysql": "^2.15.0",
-    "reflect-metadata": "^0.1.12",
-    "sinon-chai": "^2.13.0",
-    "ts-node": "^6.0.0",
-    "tslint": "^5.7.0",
-    "tslint-stylish": "^2.1.0",
-    "typedi": "^0.9.0",
-    "typeorm": "^0.2.29",
+    "@types/node": "^14.14.21",
+    "prettier": "^2.2.1",
+    "reflect-metadata": "0.1.13",
+    "rimraf": "3.0.2",
+    "typedi": "^0.10.0",
+    "typeorm": "^0.2.30",
     "typescript": "^4.1.3"
   },
   "peerDependencies": {
-    "typedi": ">=0.9.0",
-    "typeorm": ">=0.2.0"
+    "typedi": ">=0.10.0",
+    "typeorm": ">=0.2.30"
   }
 }
