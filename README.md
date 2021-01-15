@@ -40,11 +40,12 @@ import { Container } from 'typedi';
 useContainer(Container);
 
 /** Create a connection and start using TypeORM. */
-createConnection({ /* <connection options> */})
-  .catch(error => {
-    console.error(`Couldn't connect to the database!`);
-    console.error(error);
-  });
+createConnection({
+  /* <connection options> */
+}).catch(error => {
+  console.error(`Couldn't connect to the database!`);
+  console.error(error);
+});
 ```
 
 ## Usage
@@ -66,7 +67,6 @@ import { InjectConnection } from 'typeorm-typedi-extensions';
 
 @Service()
 export class MyCustomClass {
-
   @InjectConnection()
   private propertyInjectedConnection: Connection;
 
@@ -86,7 +86,6 @@ import { InjectManager } from 'typeorm-typedi-extensions';
 
 @Service()
 export class MyCustomClass {
-
   @InjectManager()
   private propertyInjectedEntityManager: EntityManager;
 
@@ -108,7 +107,6 @@ import { MyDatabaseModel } from './entities/post.entity.ts';
 
 @Service()
 export class MyCustomClass {
-
   @InjectRepository(MyDatabaseModel)
   private propertyInjectedRepository: Repository<MyDatabaseModel>;
 
@@ -116,7 +114,7 @@ export class MyCustomClass {
 }
 ```
 
-Example with custom connection name: 
+Example with custom connection name:
 
 ```ts
 @Service()
