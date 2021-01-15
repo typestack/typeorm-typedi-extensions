@@ -21,4 +21,4 @@
 
 _No changelog before release 0.2.3._
 
-[v0.4.0]: https://github.com/typeorm/typeorm-typedi-extensions/compare/v0.2.3...0.4.0
+[v0.4.0]: https://github.com/typeorm/typeorm-typedi-extensions/compare/v0.2.3...v0.4.0
