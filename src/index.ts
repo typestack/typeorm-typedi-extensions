@@ -7,6 +7,6 @@ import { ConnectionManager } from 'typeorm';
  */
 Container.set({ id: ConnectionManager, type: ConnectionManager });
 
-export * from './decorators/InjectConnection';
-export * from './decorators/InjectManager';
-export * from './decorators/InjectRepository';
+export * from './decorators/inject-connection.decorator';
+export * from './decorators/inject-manager.decorator';
+export * from './decorators/inject-repository.decorator';
