@@ -11,7 +11,7 @@
   "typings": "./types/index.d.ts",
   "repository": {
     "type": "git",
-    "url": "https://github.com/pleerock/typedi.git"
+    "url": "https://github.com/typeorm/typeorm-typedi-extensions.git"
   },
   "tags": [
     "orm",
