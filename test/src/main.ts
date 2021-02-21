@@ -1,6 +1,6 @@
 import 'reflect-metadata';
-import { Container } from 'typedi';
 import { useContainer } from 'typeorm';
+import { Container } from '../../src';
 import { startApp } from './app';
 
 useContainer(Container);
