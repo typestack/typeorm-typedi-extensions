@@ -1,4 +1,4 @@
-import { ContainedType, ContainerInterface,  } from 'typeorm';
+import { ContainedType, ContainerInterface } from 'typeorm';
 import { Container, Constructable } from 'typedi';
 
 /**
@@ -6,7 +6,7 @@ import { Container, Constructable } from 'typedi';
  */
 export class TypeDIContainerProvider implements ContainerInterface {
   get<T>(constructable: ContainedType<T>) {
-    /** 
+    /**
      * TypeDI only resolves values for registered types, so we need to register
      * them before to requesting them from the default container.
      */
