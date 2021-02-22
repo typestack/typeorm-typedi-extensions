@@ -34,9 +34,10 @@ Configure TypeORM in your app to use the TypeDI container before you create a co
 
 ```ts
 import { createConnection, useContainer } from 'typeorm';
-import { Container } from 'typedi';
+import { Container } from 'typeorm-typedi-extensions';
+//       ▲ Notice how we import container from this library, instead of TypeDI.
 
-/** Tell TypeORM to use the TypeDI container to resolve it's dependencies. */
+/** Tell TypeORM to use the container provided by this lib to resolve it's dependencies. */
 useContainer(Container);
 
 /** Create a connection and start using TypeORM. */
