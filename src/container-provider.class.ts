@@ -16,4 +16,13 @@ export class TypeDIContainerProvider implements ContainerInterface {
 
     return Container.get(constructable as Constructable<T>);
   }
+
+  /**
+   * Completely resets the container by removing all previously registered services and handlers from it.
+   * @param containerId
+   * @returns
+   */
+  reset(containerId?: string | undefined) {
+    return Container.reset(containerId);
+  }
 }
