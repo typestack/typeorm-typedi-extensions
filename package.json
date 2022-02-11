@@ -4,6 +4,10 @@
   "description": "Dependency injection and service container integration with TypeORM using TypeDI library.",
   "author": "TypeORM contributors",
   "license": "MIT",
+  "publishConfig": {
+    "registry": "https://fupay-983056893078.d.codeartifact.ap-southeast-2.amazonaws.com/npm/npmjs/",
+    "directory": "build"
+  },
   "sideEffects": false,
   "main": "./cjs/index.js",
   "module": "./esm5/index.js",
@@ -11,7 +15,7 @@
   "typings": "./types/index.d.ts",
   "repository": {
     "type": "git",
-    "url": "https://github.com/typeorm/typeorm-typedi-extensions.git"
+    "url": "https://github.com/JB-AssetChain/typeorm-typedi-extensions.git"
   },
   "tags": [
     "orm",
@@ -29,7 +33,8 @@
     "build:types": "tsc --project tsconfig.prod.types.json",
     "prettier:fix": "prettier --write \"**/*.{ts,md}\"",
     "prettier:check": "prettier --check \"**/*.{ts,md}\"",
-    "test": "cd test && npm run test"
+    "test": "cd test && npm run test",
+    "publish:all": "npm publish build"
   },
   "devDependencies": {
     "@types/node": "^14.14.21",
@@ -43,5 +48,8 @@
   "peerDependencies": {
     "typedi": ">=0.10.0",
     "typeorm": ">=0.2.30"
+  },
+  "dependencies": {
+    "sql.js": "^1.6.2"
   }
 }

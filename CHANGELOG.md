@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.4.2][v0.4.2] - 2022-2-11
+
+### Added
+
+- set ConnectionManager as global to resolve the scopedContainer issue.
+
 ## [0.4.1][v0.4.1] - 2021-02-22
 
 ### Added
