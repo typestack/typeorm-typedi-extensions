@@ -1,6 +1,5 @@
 import { ConnectionManager } from 'typeorm';
 import { Constructable, Container } from 'typedi';
-import { ConnectionNotFoundError } from '../errors/manager-not-found.error';
 
 /**
  * Injects the `EntityManager` object using TypeDI's container.
@@ -14,10 +13,6 @@ export function InjectManager(connectionName: string = 'default'): CallableFunct
       propertyName: propertyName as string,
       value: containerInstance => {
         const connectionManager = containerInstance.get(ConnectionManager);
-
-        if (!connectionManager.has(connectionName)) {
-          throw new ConnectionNotFoundError(connectionName);
-        }
 
         return connectionManager.get(connectionName).manager;
       },

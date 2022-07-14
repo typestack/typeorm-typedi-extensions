@@ -4,7 +4,6 @@ import { Constructable, Container, ContainerInstance } from 'typedi';
 import { EntityTypeMissingError } from '../errors/entity-type-missing.error';
 import { PropertyTypeMissingError } from '../errors/property-type-missing.error';
 import { ParamTypeMissingError } from '../errors/param-type-missing.error';
-import { ConnectionNotFoundError } from '../errors/manager-not-found.error';
 
 /**
  * Helper to avoid V8 compilation of anonymous function on each call of decorator.
@@ -16,10 +15,6 @@ function getRepositoryHelper(
   containerInstance: ContainerInstance
 ) {
   const connectionManager = containerInstance.get(ConnectionManager);
-  if (!connectionManager.has(connectionName)) {
-    throw new ConnectionNotFoundError(connectionName);
-  }
-
   const connection = connectionManager.get(connectionName);
 
   switch (repositoryType) {
