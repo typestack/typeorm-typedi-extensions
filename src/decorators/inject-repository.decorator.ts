@@ -7,8 +7,7 @@ import { ParamTypeMissingError } from '../errors/param-type-missing.error';
 import { ConnectionNotFoundError } from '../errors/manager-not-found.error';
 import ConnectionManager from '../connection-manager.class';
 
-
-type allowForceType = 'Repository' | 'MongoRepository' | 'TreeRepository' | null 
+type allowForceType = 'Repository' | 'MongoRepository' | 'TreeRepository' | null;
 
 /**
  * Helper to avoid V8 compilation of anonymous function on each call of decorator.
@@ -25,19 +24,19 @@ function getRepositoryHelper(
     throw new ConnectionNotFoundError(connectionName);
   }
 
-  if(repositoryType === Repository || forceType === 'Repository'){
+  if (repositoryType === Repository || forceType === 'Repository') {
     return connection.getRepository(entityType);
   }
 
-  if(repositoryType === MongoRepository || forceType === 'MongoRepository'){
+  if (repositoryType === MongoRepository || forceType === 'MongoRepository') {
     return connection.getMongoRepository(entityType);
   }
 
-  if(repositoryType === TreeRepository || forceType === 'TreeRepository'){
+  if (repositoryType === TreeRepository || forceType === 'TreeRepository') {
     return connection.getTreeRepository(entityType);
   }
 
-  return (repositoryType);
+  return repositoryType;
 }
 
 /**
@@ -74,7 +73,7 @@ export function InjectRepository(entityType: Function): CallableFunction;
 
 /**
  * Injects the requested `Repository`, `MongoRepository`, `TreeRepository` object using TypeDI's container forced.
-  *
+ *
  * ```ts
  * class SampleClass {
  *  \@InjectRepository(User, "Repository")
@@ -84,8 +83,7 @@ export function InjectRepository(entityType: Function): CallableFunction;
  * }
  * ```
  */
-export function InjectRepository(entityType:Function, forceType:allowForceType): CallableFunction;
-
+export function InjectRepository(entityType: Function, forceType: allowForceType): CallableFunction;
 
 /**
  * Injects the requested `Repository`, `MongoRepository`, `TreeRepository` object using TypeDI's container.
@@ -101,10 +99,14 @@ export function InjectRepository(entityType:Function, forceType:allowForceType):
  * }
  * ```
  */
-export function InjectRepository(entityType: Function, forceType: allowForceType, connectionName: string): CallableFunction;
+export function InjectRepository(
+  entityType: Function,
+  forceType: allowForceType,
+  connectionName: string
+): CallableFunction;
 export function InjectRepository(
   entityTypeOrConnectionName?: Function | string,
-  forceType:allowForceType = null,
+  forceType: allowForceType = null,
   paramConnectionName = 'default'
 ): CallableFunction {
   return (object: object, propertyName: string | symbol, index?: number): void => {
@@ -153,13 +155,14 @@ export function InjectRepository(
         }
     }
 
-    const forcedType = !!forceType ? forceType : null; 
+    const forcedType = !!forceType ? forceType : null;
 
     Container.registerHandler({
       object: object as Constructable<unknown>,
       index: index,
       propertyName: propertyName as string,
-      value: containerInstance => getRepositoryHelper(connectionName, repositoryType, entityType!, containerInstance, forcedType),
+      value: containerInstance =>
+        getRepositoryHelper(connectionName, repositoryType, entityType!, containerInstance, forcedType),
     });
   };
 }

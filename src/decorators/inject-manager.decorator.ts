@@ -19,7 +19,7 @@ export function InjectManager(connectionName: string = 'default'): CallableFunct
           throw new ConnectionNotFoundError(connectionName);
         }
 
-        return ConnectionManager.getManager(); 
+        return ConnectionManager.getManager();
       },
     });
   };

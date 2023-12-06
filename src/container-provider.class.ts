@@ -17,9 +17,11 @@ export class TypeDIContainerProvider implements ContainerInterface {
   }
 }
 
-export type ContainedType<T> = {
-  new (...args: any[]): T;
-} | Function;
+export type ContainedType<T> =
+  | {
+      new (...args: any[]): T;
+    }
+  | Function;
 
 export interface ContainerInterface {
   get<T>(someClass: ContainedType<T>): T;
