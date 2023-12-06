@@ -72,7 +72,7 @@ export function InjectRepository(connectionName: string): CallableFunction;
 export function InjectRepository(entityType: Function): CallableFunction;
 
 /**
- * Injects the requested `Repository`, `MongoRepository`, `TreeRepository` object using TypeDI's container forced.
+ * Injects the entity with a forced type: Repository, MongoRepository, TreeRepository
  *
  * ```ts
  * class SampleClass {

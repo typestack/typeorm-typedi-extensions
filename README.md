@@ -125,6 +125,17 @@ export class PostRepository {
 }
 ```
 
+You can also Inject an entity by forcing it to take on a specific type:
+Repository, MongoRepository or TreeRepository
+ ```ts
+ class SampleClass {
+  \@InjectRepository(User, "Repository")
+   userRepository: Repository<User>;
+    constructor(@InjectRepository(User, "Repository") private userRepository: Repository<User>) {}
+ }
+ ```
+
+
 You can also inject custom `Repository` of some Entity. To make this work have to create the class which extends the
 generic `Repository<T>` class and decorate it with `EntityRepository<T>` decorator.
 
@@ -155,5 +166,21 @@ export class PostService {
   }
 }
 ```
+
+
+To use the plugin with Typeorm version 0.3.x:
+
+To use in new versions of typeorm, it will be necessary to use the useConnection.setDatasource method, it expects a datasource as a parameter
+
+example:
+
+```typescript
+import { useConnection } from 'typeorm-typedi-extensions';
+
+
+const connection = new Datasource({...paramsToConnection})
+useConnection.setDatasource(connection) 
+``````
+
 
 [typedi]: https://github.com/typestack/typedi
