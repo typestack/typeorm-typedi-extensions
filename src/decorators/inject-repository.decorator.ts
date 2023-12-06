@@ -1,10 +1,14 @@
-import { ConnectionManager, Repository, TreeRepository, MongoRepository, EntityTarget, ObjectType } from 'typeorm';
+import { Repository, TreeRepository, MongoRepository, EntityTarget, ObjectType } from 'typeorm';
 import { Constructable, Container, ContainerInstance } from 'typedi';
 
 import { EntityTypeMissingError } from '../errors/entity-type-missing.error';
 import { PropertyTypeMissingError } from '../errors/property-type-missing.error';
 import { ParamTypeMissingError } from '../errors/param-type-missing.error';
 import { ConnectionNotFoundError } from '../errors/manager-not-found.error';
+import ConnectionManager from '../connection-manager.class';
+
+
+type allowForceType = 'Repository' | 'MongoRepository' | 'TreeRepository' | null 
 
 /**
  * Helper to avoid V8 compilation of anonymous function on each call of decorator.
@@ -12,27 +16,28 @@ import { ConnectionNotFoundError } from '../errors/manager-not-found.error';
 function getRepositoryHelper(
   connectionName: string,
   repositoryType: ObjectType<unknown>,
-  entityType: EntityTarget<unknown>,
-  containerInstance: ContainerInstance
+  entityType: EntityTarget<any>,
+  containerInstance: ContainerInstance,
+  forceType: allowForceType
 ) {
-  const connectionManager = containerInstance.get(ConnectionManager);
-  if (!connectionManager.has(connectionName)) {
+  const connection = ConnectionManager.getConnection();
+  if (!connection) {
     throw new ConnectionNotFoundError(connectionName);
   }
 
-  const connection = connectionManager.get(connectionName);
-
-  switch (repositoryType) {
-    case Repository:
-      return connection.getRepository(entityType);
-    case MongoRepository:
-      return connection.getMongoRepository(entityType);
-    case TreeRepository:
-      return connection.getTreeRepository(entityType);
-    default:
-      /** If the requested type is not well-known, then it must be a custom repository. */
-      return connection.getCustomRepository(repositoryType);
+  if(repositoryType === Repository || forceType === 'Repository'){
+    return connection.getRepository(entityType);
   }
+
+  if(repositoryType === MongoRepository || forceType === 'MongoRepository'){
+    return connection.getMongoRepository(entityType);
+  }
+
+  if(repositoryType === TreeRepository || forceType === 'TreeRepository'){
+    return connection.getTreeRepository(entityType);
+  }
+
+  return (repositoryType);
 }
 
 /**
@@ -66,6 +71,22 @@ export function InjectRepository(connectionName: string): CallableFunction;
  * ```
  */
 export function InjectRepository(entityType: Function): CallableFunction;
+
+/**
+ * Injects the requested `Repository`, `MongoRepository`, `TreeRepository` object using TypeDI's container forced.
+  *
+ * ```ts
+ * class SampleClass {
+ *  \@InjectRepository(User, "Repository")
+ *   userRepository: Repository<User>;
+ *
+ *   constructor(@InjectRepository(User, "Repository") private userRepository: Repository<User>) {}
+ * }
+ * ```
+ */
+export function InjectRepository(entityType:Function, forceType:allowForceType): CallableFunction;
+
+
 /**
  * Injects the requested `Repository`, `MongoRepository`, `TreeRepository` object using TypeDI's container.
  * To make injection work without explicity specifying the type in the decorator, you must annotate your properties
@@ -80,9 +101,10 @@ export function InjectRepository(entityType: Function): CallableFunction;
  * }
  * ```
  */
-export function InjectRepository(entityType: Function, connectionName: string): CallableFunction;
+export function InjectRepository(entityType: Function, forceType: allowForceType, connectionName: string): CallableFunction;
 export function InjectRepository(
   entityTypeOrConnectionName?: Function | string,
+  forceType:allowForceType = null,
   paramConnectionName = 'default'
 ): CallableFunction {
   return (object: object, propertyName: string | symbol, index?: number): void => {
@@ -131,11 +153,13 @@ export function InjectRepository(
         }
     }
 
+    const forcedType = !!forceType ? forceType : null; 
+
     Container.registerHandler({
       object: object as Constructable<unknown>,
       index: index,
       propertyName: propertyName as string,
-      value: containerInstance => getRepositoryHelper(connectionName, repositoryType, entityType!, containerInstance),
+      value: containerInstance => getRepositoryHelper(connectionName, repositoryType, entityType!, containerInstance, forcedType),
     });
   };
 }
