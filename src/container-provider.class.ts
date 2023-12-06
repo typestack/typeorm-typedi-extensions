@@ -1,4 +1,3 @@
-import { ContainedType, ContainerInterface } from 'typeorm';
 import { Container, Constructable } from 'typedi';
 
 /**
@@ -16,4 +15,12 @@ export class TypeDIContainerProvider implements ContainerInterface {
 
     return Container.get(constructable as Constructable<T>);
   }
+}
+
+export type ContainedType<T> = {
+  new (...args: any[]): T;
+} | Function;
+
+export interface ContainerInterface {
+  get<T>(someClass: ContainedType<T>): T;
 }
